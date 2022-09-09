@@ -37,8 +37,7 @@ module proto245s #(
     input  logic              ft_clk,   // FT CLOCKOUT signal
     input  logic              ft_rxfn,  // FT RXF# signal
     input  logic              ft_txen,  // FT TXE# signal
-    input  logic [DATA_W-1:0] ft_din,   // FT DATA tri-state IOs: input
-    output logic [DATA_W-1:0] ft_dout,  // FT DATA tri-state IOs: output
+    inout  logic [DATA_W-1:0] ft_data,  // FT DATA IOs
     input  logic [BE_W-1:0]   ft_bein,  // FT BE tri-state IOs: input
     output logic [BE_W-1:0]   ft_beout, // FT BE tri-state IOs: output
     output logic              ft_rdn,   // FT RD# signal
@@ -68,6 +67,13 @@ localparam RX_FIFO_ADDR_W = $clog2(RX_FIFO_SIZE);
 //-------------------------------------------------------------------
 // From FT chip
 //-------------------------------------------------------------------
+
+wire [DATA_W-1:0] ft_din;
+wire [DATA_W-1:0] ft_dout;
+
+assign ft_data = ft_oen ? ft_dout : 'z;
+assign ft_din  = ft_data;
+    
 logic [DATA_W-1:0] din;
 logic rxfn;
 logic txen;
